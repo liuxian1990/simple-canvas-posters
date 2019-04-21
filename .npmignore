@@ -1,0 +1,6 @@
+.vscode
+src
+typings
+tsconfig.json
+.prettierrc
+.prettierignore

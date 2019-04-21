@@ -1,0 +1,10 @@
+{
+  "name": "simple-canvas-posters",
+  "version": "0.1.3",
+  "main": "dist/index.js",
+  "author": "liuxian",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc -P tsconfig.json"
+  }
+}
