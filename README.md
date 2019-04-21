@@ -55,8 +55,6 @@ canvas
   .draw();
 ```
 
-## 在小程序中使用
+## 在源生小程序中使用
 
-```
-
-```
+`npm run build` 之后将 dist/index.js copy 到源生小程序项目中
