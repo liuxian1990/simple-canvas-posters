@@ -6,5 +6,9 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc -P tsconfig.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/liuxian1990/simple-canvas-posters"
   }
 }
