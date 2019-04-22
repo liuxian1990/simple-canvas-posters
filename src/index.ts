@@ -18,7 +18,7 @@ interface Layer {
 function addLayer(layer: Layer): void {
   if (layer.id) {
     toScale(layer, 1 / this.scale);
-    this.layers[layer.id] = layer;
+    this.layers.push(layer);
     if (this[layer.id] === undefined) {
       this[layer.id] = layer;
     } else {
@@ -41,11 +41,13 @@ function toScale(layer: Layer, scale: number) {
 
 function relativePosition(layer: Layer): Layer {
   if (layer.referLayer) {
-    const referLayer: Layer = this.layers[layer.referLayer.id];
+    const referLayer: Layer = this[layer.referLayer.id];
     if (referLayer) {
       const { top, left } = layer.referLayer;
-      !top || (layer.top = referLayer.top + referLayer.height + top);
-      !left || (layer.left = referLayer.left + referLayer.width + left);
+      top === undefined ||
+        (layer.top = referLayer.top + referLayer.height + top);
+      left === undefined ||
+        (layer.left = referLayer.left + referLayer.width + left);
     } else {
       console.warn(`没有定义[ ${layer.referLayer.id} ]这个id`, layer);
     }
@@ -73,7 +75,7 @@ class SimpleCanvas {
   scale: number = 1;
   ctx: any;
   canvasId: string;
-  layers: any = {};
+  layers: Layer[] = [];
 
   constructor({ scale = 1, canvasId }: any) {
     const ctx = wx.createCanvasContext(canvasId);
@@ -94,6 +96,20 @@ class SimpleCanvas {
     const textRowNum = Math.ceil(textWidth / width);
     return textRowNum * (lineHeight + fontSize) * scale - lineHeight;
   };
+
+  // 获取canvas高度
+  getAutoCanvasHeight(): number {
+    return Math.max.apply(
+      Math,
+      this.layers.map((layer: Layer) => {
+        const { top = 0, height = 0, type } = layer;
+        if (type === 'artboard') {
+          return 0;
+        }
+        return top + height;
+      })
+    );
+  }
 
   /**
    * 创建Artboard

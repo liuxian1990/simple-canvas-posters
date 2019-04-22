@@ -1,7 +1,5 @@
 ## simple-canvas-posters
 
----
-
 一款用 canvas 绘制朋友圈分享海报的简单工具，优点支持相对位置布局，无需计算绝对位置，会根据相对图层的位置改变布局。
 目前仅支持微信小程序，可在 mpvue, nui-app 中使用
 
@@ -10,6 +8,8 @@
 ```bash
 npm i simple-canvas-posters
 ```
+
+[查看小程序演示](https://developers.weixin.qq.com/s/YPzL6OmH7W7c)
 
 ## 使用
 
