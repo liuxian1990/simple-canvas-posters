@@ -1,6 +1,6 @@
 {
   "name": "simple-canvas-posters",
-  "version": "0.1.7",
+  "version": "0.2.1",
   "main": "dist/index.js",
   "author": "liuxian",
   "license": "MIT",
