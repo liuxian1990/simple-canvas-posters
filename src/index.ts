@@ -193,10 +193,9 @@ class SimpleCanvas {
       height,
       mode,
       sWidth,
-      sHeight,
-      scale
+      sHeight
     } = relativePosition.call(this, layer);
-    const { ctx } = this;
+    const { ctx, scale } = this;
 
     if (mode && mode === 'center') {
       let sLeft = 0;
@@ -212,8 +211,8 @@ class SimpleCanvas {
         _width = width * (sHeight / height);
       }
 
-      sLeft = (sWidth - width) / 2;
-      sTop = (sHeight - height) / 2;
+      sLeft = (sWidth - _width) / 2;
+      sTop = (sHeight - _height) / 2;
 
       ctx.drawImage(
         path,
