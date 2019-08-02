@@ -13,6 +13,9 @@ interface Layer {
   backgroundColor?: string;
   color?: string;
   referLayer?: Layer;
+  mode?: string;
+  sWidth: number;
+  sHeight: number;
 }
 
 function addLayer(layer: Layer): void {
@@ -182,13 +185,50 @@ class SimpleCanvas {
    * }
    */
   drawImage(layer: Layer): SimpleCanvas {
-    const { left, top, path, width, height } = relativePosition.call(
-      this,
-      layer
-    );
+    const {
+      left,
+      top,
+      path,
+      width,
+      height,
+      mode,
+      sWidth,
+      sHeight,
+      scale
+    } = relativePosition.call(this, layer);
     const { ctx } = this;
 
-    ctx.drawImage(path, left, top, width, height);
+    if (mode && mode === 'center') {
+      let sLeft = 0;
+      let sTop = 0;
+      let _width = 0;
+      let _height = 0;
+
+      _width = sWidth;
+      _height = height * (sWidth / width);
+
+      if (_height > sHeight) {
+        _height = sHeight;
+        _width = width * (sHeight / height);
+      }
+
+      sLeft = (sWidth - width) / 2;
+      sTop = (sHeight - height) / 2;
+
+      ctx.drawImage(
+        path,
+        sLeft / scale,
+        sTop / scale,
+        _width / scale,
+        _height / scale,
+        left,
+        top,
+        width,
+        height
+      );
+    } else {
+      ctx.drawImage(path, left, top, width, height);
+    }
 
     layer.type = 'image';
     addLayer.call(this, layer);
