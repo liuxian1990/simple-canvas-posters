@@ -34,7 +34,7 @@ function addLayer(layer: Layer): void {
 
 function toScale(layer: Layer, scale: number) {
   if (layer) {
-    Object.keys(layer).forEach(key => {
+    Object.keys(layer).forEach((key) => {
       if (Object.prototype.toString.call(layer[key]) === '[object Number]') {
         layer[key] = layer[key] * scale;
       }
@@ -81,7 +81,7 @@ class SimpleCanvas {
   layers: Layer[] = [];
 
   constructor({ scale = 1, canvasId }: any) {
-    const ctx = wx.createCanvasContext(canvasId);
+    const ctx = tt.createCanvasContext(canvasId);
     this.scale = scale;
     this.ctx = ctx;
     this.canvasId = canvasId;
@@ -99,7 +99,9 @@ class SimpleCanvas {
     const textRowNum = Math.ceil(textWidth / width);
     return textRowNum * (lineHeight + fontSize) * scale - lineHeight;
   };
-
+  static textWidth({ text, fontSize }) {
+    return getStrLength(text) * fontSize;
+  }
   // 获取canvas高度
   getAutoCanvasHeight(): number {
     return Math.max.apply(
@@ -138,11 +140,15 @@ class SimpleCanvas {
   /**
    * 创建Rectangle
    * params: {
-   *  backgroundColor,
-   *  top,
-   *  left,
-   *  width,
-   *  height,
+   * left,
+   * top,
+   * width,
+   * height,
+   * radius,
+   * path,
+   * borderColor,
+   * borderWidth,
+   * backgroundColor
    *  referLayer: { // 相对位置在这里设置后外层top, left 失效
    *    id,
    *    top,
@@ -152,16 +158,43 @@ class SimpleCanvas {
    */
   createRectangle(layer: Layer): SimpleCanvas {
     const {
-      left,
-      top,
-      backgroundColor = '#cccccc',
-      width,
-      height
+      left: x,
+      top: y,
+      width: w,
+      height: h,
+      radius: r = 0,
+      path,
+      borderColor,
+      borderWidth,
+      backgroundColor
     } = relativePosition.call(this, layer);
     const { ctx } = this;
 
-    ctx.setFillStyle(backgroundColor);
-    ctx.fillRect(left, top, width, height);
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    if (backgroundColor) {
+      ctx.setFillStyle(backgroundColor);
+      ctx.fill();
+    }
+    if (path) {
+      ctx.clip();
+      ctx.drawImage(path, x, y, w, h);
+    }
+    if (borderColor) {
+      borderWidth && ctx.setLineWidth(borderWidth);
+      ctx.setStrokeStyle(borderColor);
+      ctx.stroke();
+    }
+    ctx.restore();
 
     layer.type = 'rectangle';
     addLayer.call(this, layer);
@@ -280,22 +313,38 @@ class SimpleCanvas {
       top = 0,
       text = '',
       fontSize = 12,
+      fontStyle = '',
       width = 200,
       lineHeight = 1,
-      color = '#333333'
+      color = '#333333',
+      fontFamily = 'Arial',
+      maxLine
     } = relativePosition.call(this, layer);
 
     const { ctx } = this;
 
     const chr = text.split('');
-    let temp = '';
     const row = [];
-    ctx.setFontSize(fontSize); // 设置文字大小便于measureText计算宽度
-    for (let a = 0; a < chr.length; a += 1) {
-      if (ctx.measureText(temp).width < width) {
-        temp += chr[a];
+    let line = 1;
+    let temp = '';
+    ctx.font = `${fontStyle} ${fontSize}px ${fontFamily}`;
+    ctx.setFontSize(fontSize);
+    for (let a = 0; a < chr.length; ) {
+      // 每行至少展示一个字符
+      if (ctx.measureText(temp).width < width || temp.length === 0) {
+        temp += chr[a++];
+      } else if (maxLine && line === maxLine) {
+        while (ctx.measureText(temp + '...').width > width && temp.length > 1) {
+          temp = temp.slice(0, -1);
+        }
+        temp += '...';
+        break;
       } else {
-        a -= 1;
+        if (ctx.measureText(temp).width > width && temp.length > 1) {
+          temp = temp.slice(0, -1);
+          a -= 1;
+        }
+        line++;
         row.push(temp);
         temp = '';
       }
@@ -304,15 +353,15 @@ class SimpleCanvas {
 
     let textTop;
 
+    ctx.setFillStyle(color);
     for (let b = 0; b < row.length; b += 1) {
       textTop = top + (fontSize + (b * fontSize + b * lineHeight));
-      ctx.setFillStyle(color);
-      ctx.setFontSize(fontSize);
       ctx.fillText(row[b], left, textTop);
     }
 
     layer.type = 'wrapText';
     layer.height = textTop - top; // 计算出换行后文字高度
+    layer.width = ctx.measureText(row[row.length - 1]).width; // 记录最后一行的宽度
 
     addLayer.call(this, layer);
     return this;

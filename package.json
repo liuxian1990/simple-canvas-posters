@@ -1,15 +1,15 @@
 {
-  "name": "simple-canvas-posters",
-  "version": "0.2.4",
+  "name": "tt-simple-canvas-posters",
+  "version": "0.1.0",
   "main": "dist/index.js",
   "author": "liuxian",
   "license": "MIT",
-  "description": "一款用 canvas 绘制朋友圈分享海报的简单工具，优点支持相对位置布局，无需计算绝对位置，会根据相对图层的位置改变布局。目前仅支持微信小程序，可在 mpvue, nui-app 中使用",
+  "description": "一款用 canvas 绘制朋友圈分享海报的简单工具，优点支持相对位置布局，无需计算绝对位置，会根据相对图层的位置改变布局。目前仅支持头条小程序，可在 mpvue, nui-app 中使用",
   "keywords": [
     "canvas",
     "posters",
     "simple",
-    "wx",
+    "tt",
     "share"
   ],
   "scripts": {
@@ -17,6 +17,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/liuxian1990/simple-canvas-posters"
+    "url": "https://github.com/WebbLin/simple-canvas-posters"
+  },
+  "devDependencies": {
+    "typescript": "^3.9.7"
   }
 }

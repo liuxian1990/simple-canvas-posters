@@ -1,19 +1,12 @@
 ## simple-canvas-posters
 
+Fork from [simple-canvas-posters](https://github.com/liuxian1990/simple-canvas-posters)
+
+扩展了一部分能力，对字节平台也做了部分兼容
+
 一款用 canvas 绘制朋友圈分享海报的简单工具，优点支持相对位置布局，无需计算绝对位置，会根据相对图层的位置改变布局。
-目前仅支持微信小程序，可在 mpvue, nui-app 中使用
 
-![npm bundle size](https://img.shields.io/bundlephobia/min/simple-canvas-posters.svg?color=%230080FF&style=flat-square)
-![npm](https://img.shields.io/npm/v/simple-canvas-posters.svg?color=%230080FF&style=flat-square)
-![NPM](https://img.shields.io/npm/l/simple-canvas-posters.svg?color=%230080FF&style=flat-square)
-
-## 安装
-
-```bash
-npm i simple-canvas-posters
-```
-
-[查看小程序演示](https://developers.weixin.qq.com/s/YPzL6OmH7W7c)
+目前仅支持字节小程序，可在 mpvue, nui-app 中使用。
 
 ## 使用
 
@@ -61,4 +54,4 @@ canvas
 
 ## 在源生小程序中使用
 
-`npm run build` 之后将 dist/index.js copy 到源生小程序项目中
+`npm run build` 之后将 dist/index.js copy 到原生小程序项目中
