@@ -80,10 +80,13 @@ class SimpleCanvas {
   canvasId: string;
   layers: Layer[] = [];
 
-  constructor({ scale = 1, canvasId }: any) {
-    const ctx = wx.createCanvasContext(canvasId);
+  constructor({ scale = 1, canvasId, self = {} }: any) {
+    if (self) {
+      this.ctx = wx.createCanvasContext(canvasId, self);
+    } else {
+      this.ctx = wx.createCanvasContext(canvasId);
+    }
     this.scale = scale;
-    this.ctx = ctx;
     this.canvasId = canvasId;
   }
 
@@ -313,6 +316,30 @@ class SimpleCanvas {
 
     layer.type = 'wrapText';
     layer.height = textTop - top; // 计算出换行后文字高度
+    layer.width = width;
+
+    addLayer.call(this, layer);
+    return this;
+  }
+
+  drawText(layer: Layer) {
+    const {
+      left = 0,
+      top = 0,
+      text = '',
+      fontSize = 12,
+      color = '#333333'
+    } = relativePosition.call(this, layer);
+
+    const { ctx } = this;
+
+    ctx.setFontSize(fontSize);
+    ctx.setFillStyle(color);
+    ctx.fillText(text, left, top + fontSize);
+
+    layer.type = 'text';
+    layer.height = fontSize;
+    layer.width = ctx.measureText(text).width;
 
     addLayer.call(this, layer);
     return this;

@@ -4229,6 +4229,7 @@ declare namespace wx {
     createCanvasContext(
       /** 要获取上下文的 `<canvas>` 组件 canvas-id 属性 */
       canvasId: string,
+      self?: object,
     ): CanvasContext;
     /** [[IntersectionObserver]((IntersectionObserver)) wx.createIntersectionObserver(Object this, Object options)](wx.createIntersectionObserver.md)
      *
@@ -4378,6 +4379,7 @@ declare namespace wx {
     createCanvasContext(
       /** 要获取上下文的 `<canvas>` 组件 canvas-id 属性 */
       canvasId: string,
+      self?: object
     ): CanvasContext;
     /** [[IntersectionObserver]((IntersectionObserver)) wx.createIntersectionObserver(Object this, Object options)](wx.createIntersectionObserver.md)
      *
