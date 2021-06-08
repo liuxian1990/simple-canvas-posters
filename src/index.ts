@@ -305,7 +305,7 @@ class SimpleCanvas {
     }
     row.push(temp);
 
-    let textTop;
+    let textTop:any;
 
     for (let b = 0; b < row.length; b += 1) {
       textTop = top + (fontSize + (b * fontSize + b * lineHeight));
