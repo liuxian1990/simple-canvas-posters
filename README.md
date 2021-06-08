@@ -11,6 +11,10 @@
 
 ```bash
 npm i simple-canvas-posters
+
+// or
+
+yarn add simple-canvas-posters
 ```
 
 [查看小程序演示](https://developers.weixin.qq.com/s/YPzL6OmH7W7c)
