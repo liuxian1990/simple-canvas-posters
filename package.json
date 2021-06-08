@@ -10,7 +10,8 @@
     "posters",
     "simple",
     "wx",
-    "share"
+    "share",
+    "image"
   ],
   "scripts": {
     "build": "tsc -P tsconfig.json"
